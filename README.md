@@ -70,14 +70,14 @@ return [
         'task_max_request' => '10000',			//work进程最大处理的请求数
         'client_timeout'   => '20',
         'pidfile'           => Yii::getAlias('@swoole').'/yii2-swoole/yii2-swoole.pid',
-        'log_dir'           => Yii::getAlias('@swoole').'/yii2-swoole',
-        'task_tmpdir'       => Yii::getAlias('@swoole').'/yii2-swoole',
+        'log_dir'           => Yii::getAlias('@swoole'),
+        'task_tmpdir'       => Yii::getAlias('@swoole')',
         'log_file'          => Yii::getAlias('@swoole').'/yii2-swoole/swoole.log',
         'log_size'          => 204800000,       //运行时日志 单个文件大小
     ]
 ];
 ```
-2.上一步中,我把pidfile和log目录单独定义到了swoolelog目录下,如果你也采用相同的方法,你需要设置swoolelog别名
+2.上一步中,我把pidfile和log目录单独定义到了swoolelog目录下,如果你也采用相同的方法,你需要设置swoolelog别名，并创建swoolelog目录
 修改common/bootstrap.php,添加如下内容:
 ```
 Yii::setAlias('@swoole',dirname(dirname(__DIR__)) . '/swoolelog');
