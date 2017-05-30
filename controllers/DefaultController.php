@@ -24,13 +24,13 @@ class DefaultController extends Controller
         $data = [
             "data"=>[
                 [
-                    "a" => "http://yii.phpsy.cn/swoole/default/test",
+                    "a" => "http://域名/swoole/default/test",
                 ],
                 [
-                    "a" => "http://yii.phpsy.cn/swoole/default/test",
+                    "a" => "http://域名/swoole/default/test",
                 ],
                 [
-                    "a" => "http://yii.phpsy.cn/swoole/default/test",
+                    "a" => "http://域名/swoole/default/test",
                 ],
 
             ],
