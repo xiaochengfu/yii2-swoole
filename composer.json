@@ -6,8 +6,8 @@
     "license": "BSD-3-Clause",
     "minimum-stability": "stable",
     "support": {
-        "issues": "https://github.com/xiaochengfu/yii2-migrate/issues",
-        "source": "https://github.com/xiaochengfu/yii2-migrate"
+        "issues": "https://github.com/xiaochengfu/yii2-swoole/issues",
+        "source": "https://github.com/xiaochengfu/yii2-swoole"
     },
     "authors": [
         {
