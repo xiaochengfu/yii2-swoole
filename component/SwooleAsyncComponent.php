@@ -78,7 +78,7 @@ class SwooleAsyncComponent extends \yii\base\Component
      * 往redis中投递异步任务，任务名称为随机字符串
      * 格式为:
      * $data = [
-         'data' => [
+     *    'data' => [
      *         [
      *             'a' => 'test1/mail1' #要执行的console控制器和action
      *             'p' => ['p1','p2','p3'] // action参数列表
