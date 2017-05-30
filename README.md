@@ -103,11 +103,13 @@ Yii::setAlias('@swoole',dirname(dirname(__DIR__)) . '/swoolelog');
 ]
 ```
 5.在前端应用下（frontend/config/main.php）,添加modules，通过访问http://ip/swoole来测试
+```
  'modules' => [
         'swoole' => [
             'class' => 'xiaochengfu\swoole\Module',
         ]
     ],
+```
 
 6、服务管理
 ```
