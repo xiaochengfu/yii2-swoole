@@ -49,42 +49,7 @@ composer require xiaochengfu/yii2-swoole "dev-master"
 安装前准备:
 1.需要安装curl扩展,
 composer require linslin/yii2-curl "1.1.3"
-2.需要安装mongodb,因为有部分异步任务是需要存储到mongodb中的,你需要建立queue模型,用于AR处理
-
-queue.php内容如下:
-```
-<?php
-namespace common\models;
-use yii\mongodb\ActiveRecord;
-
-class Queue extends ActiveRecord
-{
-
-    public static function collectionName()
-    {
-        return 'queue';
-    }
-
-    public function rules()
-    {
-        return [
-            [['_id','id','jobs','status'],'required'],
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            '_id',
-            'id',
-            'jobs',
-            'status'
-        ];
-    }
-
-
-}
-```
+2.需要安装mongodb,因为有部分异步任务是需要存储到mongodb中
 
 
 -----
@@ -116,11 +81,15 @@ return [
 Yii::setAlias('@swoole',dirname(dirname(__DIR__)) . '/swoolelog');
 ```
 
-3、在common/main.php配置文件中增加controllerMap
+3、在console/config/main.php配置文件中增加controllerMap
 ```php
  'controllerMap' => [
         'swoole' => [
-            'class' => 'xiaochengfu\swoole\SwooleController',
+            'class' => 'xiaochengfu\swoole\console\SwooleController',
+        ],
+        //test主要用来测试
+        'test' => [
+            'class' => 'xiaochengfu\swoole\console\TestController',
         ],
     ],
 ```
@@ -133,8 +102,14 @@ Yii::setAlias('@swoole',dirname(dirname(__DIR__)) . '/swoolelog');
              ]
 ]
 ```
+5.在前端应用下（frontend/config/main.php）,添加modules，通过访问http://ip/swoole来测试
+ 'modules' => [
+        'swoole' => [
+            'class' => 'xiaochengfu\swoole\Module',
+        ]
+    ],
 
-5、服务管理
+6、服务管理
 ```
 //启动
 php /path/to/yii/application/yii swoole start
@@ -153,236 +128,12 @@ php /path/to/yii/application/yii swoole list
 
 ```
 
-5、测试
-a.通过分别访问front/site/web|mongo|del|来测试异步任务
-b.通过访问front/site/push来测试websocket推送,客户端需要自己建立连接,fd为1
+7、测试
+a.通过分别访问front/swoole/default/index|mongo|del|来测试异步任务
+b.通过访问front/swoole/default/push来测试websocket推送,客户端需要自己建立连接,fd为1
 c.通过执行
 ```
-php /path/to/yii/application/yii job cli
+php /path/to/yii/application/yii test cli
 ```
 来测试命令行的异步任务
 
-site控制内容如下:
-```
-<?php
-namespace frontend\controllers;
-
-use common\models\User;
-use common\models\UserDb;
-use linslin\yii2\curl\Curl;
-use Yii;
-use yii\base\InvalidParamException;
-use yii\web\BadRequestHttpException;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use common\models\LoginForm;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
-use frontend\models\ContactForm;
-
-/**
- * Site controller
- */
-class SiteController extends Controller
-{
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','test','mongo','del','push','cli'],
-                'rules' => [
-                    [
-                        'actions' => ['signup','test','mongo','del','push','cli'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
-    }
-
-    /**
-     * Displays homepage.
-     *
-     * @return mixed
-     */
-    public function actionWeb()
-    {
-        $data = [
-            "data"=>[
-                [
-                    "a" => "http://ip/site/test",
-                ],
-                [
-                    "a" => "http://ip/site/test",
-                ],
-                [
-                    "a" => "http://ip/site/test",
-                ],
-
-            ],
-        ];
-        Yii::$app->swoole->webTask($data);
-        return $this->renderAjax('index');
-    }
-
-    public function actionMongo(){
-        $data = [
-            "data"=>[
-                [
-                    "a" => "job/insert",
-                ],
-                [
-                    "a" => "job/insert",
-                ],
-                [
-                    "a" => "job/insert",
-                ],
-
-            ],
-        ];
-        Yii::$app->swoole->mongodbTask($data);
-        echo '执行成功';
-
-    }
-
-    public function actionDel(){
-        $data = [
-            "data"=>[
-                [
-                    "a" => "job/cs",
-                ],
-
-            ],
-        ];
-        Yii::$app->swoole->mongodbTask($data);
-        echo '执行成功';
-    }
-
-    public function actionPush(){
-        $data = [
-            'fd'=>1,
-            "data"=>'hello world',
-        ];
-        Yii::$app->swoole->pushMsg($data);
-        echo '执行成功';
-    }
-
-    public function actionTest(){
-        $user = new User();
-        $data = $user->find()->where(['id'=>1])->asArray()->one();
-        for($i=0;$i<100;$i++){
-            $user->isNewRecord = true;
-            $user->id = 0;
-            $user->setAttributes($data);
-            if($user->save() == false){
-                var_dump($user->errors);
-            };
-        }
-        echo '执行成功';
-    }
-
-    public function actionTt(){
-        $user = new User();
-        $user->deleteAll(['>','id',1]);
-
-        echo '执行成功';
-    }
-}
-
-```
-console/job控制器内容如下:
-
-```
-<?php
-namespace console\controllers;
-use common\models\MemberCard;
-use common\models\Notifications;
-use common\models\Sms;
-use common\models\User;
-use ijackwu\ssdb\Exception;
-use yii\console\Controller;
-use common\lib\Cache;
-
-class JobController extends Controller
-{
-    public function actionInsert(){
-        $user = new User();
-        $data = $user->find()->where(['id'=>1])->asArray()->one();
-        for($i=0;$i<1000;$i++){
-            $user->isNewRecord = true;
-            $user->id = 0;
-            $user->setAttributes($data);
-            if($user->save() == false){
-                var_dump($user->errors);
-            };
-        }
-        echo '执行成功';
-    }
-
-    public function actionCs(){
-        $user = new User();
-        $user->deleteAll(['>','id',1]);
-
-        echo '执行成功';
-    }
-
-    public function actionResult(){
-        echo '回调成功';
-    }
-
-    public function actionCli(){
-        $data = [
-            "data"=>[
-                [
-                    "a" => "job/insert",
-                ],
-                [
-                    "a" => "job/insert",
-                ],
-                [
-                    "a" => "job/insert",
-                ],
-
-            ],
-        ];
-        \Yii::$app->swoole->cliAsync($data);
-        echo '执行成功';
-    }
-
-}
-```
