@@ -41,14 +41,16 @@ websocket的这种场景
 安装
 ------------
 ```
-composer require xiaochengfu/yii2-swoole "dev-master"
+composer require --prefer-dist xiaochengfu/yii2-swoole "*"
 ```
 
 如何使用
 
 安装前准备:
 1.需要安装curl扩展,
+```
 composer require linslin/yii2-curl "1.1.3"
+```
 2.需要安装mongodb,因为有部分异步任务是需要存储到mongodb中
 
 
