@@ -1,14 +1,13 @@
 <?php
 /**
  * Swoole 实现的 http server,用来处理异步多进程任务
- * $Id: SHttpServer.php 9507 2016-09-29 06:48:44Z mevyen $
- * $Date: 2016-09-29 14:48:44 +0800 (Wed, 07 Sep 2016) $
- * $Author: mevyen $
+ * author:houpeng
+ * time:2017-05-29
  */
 
 namespace xiaochengfu\swoole\src;
 
-use common\models\Queue;
+use xiaochengfu\swoole\models\Queue;
 
 class SwooleSetWebSocket{
 

@@ -1,20 +1,25 @@
 <?php
 /**
- * yii2 基于swoole的异步处理
- * time:2017-05-27
- * author:houpeng
+ * Created by PhpStorm.
+ * Author: houpeng
+ * DateTime: 2017/04/15 11:30
+ * Description:
  */
 
-namespace xiaochengfu\swoole;
+namespace xiaochengfu\swoole\console;
 
-use Yii;
 use yii\base\ErrorException;
-use yii\console\Controller;
 use xiaochengfu\swoole\src\SwooleService;
 use yii\helpers\ArrayHelper;
+use Yii;
 
-class SwooleController extends Controller {
-    
+use yii\console\Controller;
+
+
+
+class SwooleController extends Controller
+{
+
     /**
      * 存储swooleAsync配置中的所有配置项
      * @var array
@@ -89,5 +94,5 @@ class SwooleController extends Controller {
                 break;
         }
     }
-
+   
 }

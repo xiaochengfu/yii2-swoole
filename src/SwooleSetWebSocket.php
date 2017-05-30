@@ -1,13 +1,13 @@
 <?php
 /**
- * Swoole 实现的 http server,用来处理异步多进程任务、websocket服务
+ * Swoole 实现的 http server,用来处理异步多进程任务
  * author:houpeng
  * time:2017-05-29
  */
 
 namespace xiaochengfu\swoole\src;
 
-use common\models\Queue;
+use xiaochengfu\swoole\models\Queue;
 
 class SwooleSetWebSocket{
 
