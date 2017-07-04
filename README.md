@@ -147,5 +147,7 @@ php /path/to/yii/application/yii test cli
 ```
 来测试命令行的异步任务
 
-如有疑问：请加QQ：1033426413，验证信息：swoole接入
+大家如果有问题要交流，就发在这里吧：
+https://github.com/xiaochengfu/yii2-swoole/issues/1
+如有疑问：请加QQ：1033426413，验证信息：swoole接入，我会来交流区查看的
 
