@@ -28,7 +28,7 @@ Yii::$app->swoole->cliAsync($data);
 三.基于websocket的实时推送
 服务端有消息变更时,通过向客户端推送消息,来达到消息的同步和实时反馈``
 ```
-Yii::$app->swoole->pushMsg($data);
+Yii::$app->swoole->pushMsg($fd,$data);
 ```
 
 四.简单的启动/关闭/重启/状态获取命令
@@ -141,7 +141,8 @@ php /path/to/yii/application/yii swoole list
 
 7、测试
 a.通过分别访问front/swoole/default/index|mongo|del|来测试异步任务
-b.通过访问front/swoole/default/push来测试websocket推送,客户端需要自己建立连接,fd为1
+b.通过访问front/swoole/default/push来测试websocket推送,fd为1,客户端需要自己建立连接,
+网页在线测试客户端链接地址:`http://www.blue-zero.com/WebSocket/`
 c.通过执行
 ```
 php /path/to/yii/application/yii test cli

@@ -174,12 +174,24 @@ class SwooleSetWebSocket{
             $this->server->task(json_encode($queue['jobs']));
         }else{
 
-
             /**
              * 功能三:
              * 扩展部分,根据客户端发来的命令{$frame->data}来做出相应的处理,这里根据自己的需求来写不做处理...
+             * 推荐使用yii2的runActon方法来做扩展处理,来实现解耦,主要通过client发来的socket指令data来自定义区分逻辑控制器
+             * 推荐data协议指令：data=>['a'=>'test/test','p'=>['a'=>1]],a为控制器,p为参数
+             *
+             *
+             * 你的控制器console/controllers可能是这样的:
+             *  public function actionTest($param){
+             *      $info = $param['data'];
+             *      $param['server']->push($param['fid'],json_encode($info));
+             *  }
              */
-            $server->push($frame->fd, "终于等到你啦!");
+            if (isset($requestData->data->a) && $requestData->data->a) {
+                \Yii::$app->runAction($requestData->data->a, [['server'=>$server,'fid'=> $frame->fd,'data'=>$requestData->data->p]]);
+            }else{
+                $server->push($frame->fd, "终于等到你啦!");
+            }
         }
 
 

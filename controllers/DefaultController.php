@@ -74,10 +74,10 @@ class DefaultController extends Controller
 
     public function actionPush(){
         $data = [
-            'fd'=>1,
             "data"=>'hello world',
         ];
-        Yii::$app->swoole->pushMsg($data);
+        $fd = 1;
+        Yii::$app->swoole->pushMsg($fd,$data);
         echo '执行成功';
     }
 

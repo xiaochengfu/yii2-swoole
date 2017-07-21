@@ -150,18 +150,19 @@ class SwooleAsyncComponent extends \yii\base\Component
     }
 
     /**
+     * @param $fd
      * @param $data
      * @return mixed
      * websocket消息推送
      * 格式为:
-     * $data = [
      *   'fd' => xx,//客户端id
      *   'data' => [],//消息体
-     * ]
      */
-    public function pushMsg($data){
+    public function pushMsg($fd,$data){
         $settings = Yii::$app->params['swooleAsync'];
         $data['type'] = self::TYPE_SOCKET;
+        $datas['data'] = $data;
+        $datas['fd'] = $fd;
         $curl = new Curl();
         return $curl->setPostParams($data)->post($settings['swoole_http']);
     }
