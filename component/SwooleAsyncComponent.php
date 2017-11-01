@@ -160,11 +160,11 @@ class SwooleAsyncComponent extends \yii\base\Component
      */
     public function pushMsg($fd,$data){
         $settings = Yii::$app->params['swooleAsync'];
-        $data['type'] = self::TYPE_SOCKET;
-        $datas['data'] = $data;
+        $datas['type'] = self::TYPE_SOCKET;
+        $datas['data'] = json_encode($data);
         $datas['fd'] = $fd;
         $curl = new Curl();
-        return $curl->setPostParams($data)->post($settings['swoole_http']);
+        return $curl->setPostParams($datas)->post($settings['swoole_http']);
     }
     
 }
