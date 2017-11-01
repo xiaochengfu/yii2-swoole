@@ -47,7 +47,7 @@ websocket的这种场景
 安装
 ------------
 ```
-composer require --prefer-dist xiaochengfu/yii2-swoole "*"
+composer require xiaochengfu/yii2-swoole "v1.0.2"
 ```
 
 如何使用
