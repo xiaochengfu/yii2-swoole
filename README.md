@@ -1,5 +1,8 @@
 # yii2 Swoole 扩展
 
+### 如仅需要websocket，或者需要支持laravel/thinkphp/yii2等框架，请移步最新扩展 [websocket-swoole](https://github.com/xiaochengfu/websocket-swoole) 不再受框架限制
+
+
 扩展内容主要包括:
 一.异步任务队列
 这里根据不同的需求,我设计了三种不同的异步处理方法
